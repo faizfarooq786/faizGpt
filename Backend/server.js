@@ -16,7 +16,7 @@ app.get('/healthz', (_,res)=>res.send('ok'));
 const allowed = [
   'http://localhost:5173',             // Vite dev
   'http://localhost:3000',             // CRA dev
-  'https://<your-frontend>.onrender.com' 
+  'https://faizgpt-1.onrender.com' 
 ];
 
 
