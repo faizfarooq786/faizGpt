@@ -10,6 +10,8 @@ import chatRoutes from "./routes/chat.js"
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+app.get('/healthz', (_,res)=>res.send('ok'));
+
 
 const allowed = [
   'http://localhost:5173',             // Vite dev
