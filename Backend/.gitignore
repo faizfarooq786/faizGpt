@@ -1,0 +1,17 @@
+@"
+# root
+.env
+.DS_Store
+
+# frontend
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env
+
+# backend (Note: agar folder ka naam 'Backend' hai to neeche dono lines bhi rakho)
+backend/node_modules/
+backend/.env
+Backend/node_modules/
+Backend/.env
+"@ | Set-Content .gitignore
