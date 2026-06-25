@@ -108,11 +108,10 @@ import "./ChatWindow.css";
 import Chat from "./chat.jsx";
 import { MyContext } from "./MyContext.jsx";
 import { useContext, useState, useEffect } from "react";
-import { ScaleLoader } from "react-spinners";
 import { BASE } from "./base"; // ⬅️ added
 
 function ChatWindow() {
-  const { prompt, setPrompt, reply, setReply, currThreadId, setPrevChats, setNewChat } = useContext(MyContext);
+  const { prompt, setPrompt, reply, setReply, currThreadId, setPrevChats, setNewChat, isSidebarOpen, setIsSidebarOpen } = useContext(MyContext);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -168,7 +167,19 @@ function ChatWindow() {
   return (
     <div className="chatWindow">
       <div className="navbar">
-        <span className="faizlogo">faizGPT <i className="fa-solid fa-chevron-down"></i></span>
+        <div className="navLeft">
+          {!isSidebarOpen && (
+            <button
+              className="menuBtn"
+              onClick={() => setIsSidebarOpen(true)}
+              aria-label="Open sidebar"
+              title="Open sidebar"
+            >
+              <i className="fa-solid fa-bars-staggered"></i>
+            </button>
+          )}
+          <span className="faizlogo">faizGPT <i className="fa-solid fa-chevron-down"></i></span>
+        </div>
         <div className="userIconDiv" onClick={handleProfileClick}>
           <span className="userIcon"><i className="fa-solid fa-user"></i></span>
         </div>
@@ -176,28 +187,71 @@ function ChatWindow() {
 
       {isOpen &&
         <div className="dropDown">
-          <div className="dropDownItem"><i className="fa-solid fa-gear"></i> Settings</div>
-          <div className="dropDownItem"><i className="fa-solid fa-cloud-arrow-up"></i> Upgrade plan</div>
-          <div className="dropDownItem"><i className="fa-solid fa-arrow-right-from-bracket"></i> Log out</div>
+          <div className="dropDownProfile">
+            <span className="dropAvatar"><i className="fa-solid fa-user"></i></span>
+            <div className="dropProfileInfo">
+              <span className="dropName">Mohd Faiz</span>
+              <span className="dropEmail">faiz@faizgpt.com</span>
+            </div>
+          </div>
+
+          <div className="dropDivider"></div>
+
+          <div className="dropDownItem">
+            <span className="dropIcon"><i className="fa-solid fa-gear"></i></span>
+            Settings
+          </div>
+          <div className="dropDownItem upgrade">
+            <span className="dropIcon"><i className="fa-solid fa-bolt"></i></span>
+            Upgrade plan
+            <span className="proBadge">PRO</span>
+          </div>
+          <div className="dropDownItem">
+            <span className="dropIcon"><i className="fa-solid fa-circle-question"></i></span>
+            Help &amp; FAQ
+          </div>
+
+          <div className="dropDivider"></div>
+
+          <div className="dropDownItem danger">
+            <span className="dropIcon"><i className="fa-solid fa-arrow-right-from-bracket"></i></span>
+            Log out
+          </div>
         </div>
       }
 
       <Chat />
 
-      <ScaleLoader color="#fff" loading={loading} />
+      {loading && (
+        <div className="loaderWrap">
+          <div className="avatar gptAvatar">f</div>
+          <div className="typingBubble">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      )}
 
       <div className="chatInput">
         <div className="inputBox">
           <input
-            placeholder="Ask anything"
+            placeholder="Ask anything..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' ? getReply() : ''}
           />
-          <div id="submit" onClick={getReply}><i className="fa-solid fa-paper-plane"></i></div>
+          <button
+            id="submit"
+            onClick={getReply}
+            disabled={!prompt.trim() || loading}
+            aria-label="Send message"
+          >
+            <i className="fa-solid fa-arrow-up"></i>
+          </button>
         </div>
         <p className="info">
-          faizGPT can make mistakes. Check important info. See Cookie Preferences.
+          faizGPT can make mistakes. Check important info.
         </p>
       </div>
     </div>

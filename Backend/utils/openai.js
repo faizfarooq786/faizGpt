@@ -3,7 +3,7 @@ import 'dotenv/config';
 const getOpenAiApiResponse = async(message) => {
      const options = {
     method: "POST",
-    headers: {   // ✅ lowercase
+    headers: {   
       "Content-Type": "application/json",
       "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
     },

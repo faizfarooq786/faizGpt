@@ -112,7 +112,7 @@ import { v1 as uuidv1 } from "uuid";
 import { BASE } from "./base"; // ⬅️ added
 
 function Sidebar() {
-  const { allThreads, setAllThreads, currThreadId, setNewChat, setPrompt, setReply, setCurrThreadId, setPrevChats } = useContext(MyContext);
+  const { allThreads, setAllThreads, currThreadId, setNewChat, setPrompt, setReply, setCurrThreadId, setPrevChats, setIsSidebarOpen } = useContext(MyContext);
 
   const getAllThreads = async () => {
     try {
@@ -176,22 +176,39 @@ function Sidebar() {
   return (
     <section className="sidebar">
       <div className="sideBarHeader">
-        <img src="src/assets/blacklogo.png" alt="gpt logo" className="logo" />
+        <span className="brand">
+          <span className="brandMark">f</span>
+          <span className="brandText">faiz<span className="brandAccent">GPT</span></span>
+        </span>
+        <button
+          className="collapseBtn"
+          onClick={() => setIsSidebarOpen(false)}
+          aria-label="Collapse sidebar"
+          title="Collapse sidebar"
+        >
+          <i className="fa-solid fa-angles-left"></i>
+        </button>
       </div>
 
-      <button onClick={createNewChat}>
-        <h4>New Chat...</h4>
+      <button className="newChatBtn" onClick={createNewChat}>
         <span><i className="fa-solid fa-pen-to-square"></i></span>
+        <h4>New chat</h4>
       </button>
 
+      <div className="historyLabel">Recent</div>
+
       <ul className="history">
+        {allThreads?.length === 0 && (
+          <li className="historyEmpty">No conversations yet</li>
+        )}
         {allThreads?.map((thread, idx) => (
           <li
             key={idx}
             onClick={() => changeThread(thread.threadId)}
-            className={thread.threadId === currThreadId ? "highlighted" : " "}
+            className={thread.threadId === currThreadId ? "historyItem highlighted" : "historyItem"}
           >
-            {thread.title}
+            <i className="fa-regular fa-message threadIcon"></i>
+            <span className="threadTitle">{thread.title}</span>
             <i
               className="fa-solid fa-trash"
               onClick={(e) => {
@@ -204,7 +221,7 @@ function Sidebar() {
       </ul>
 
       <div className="sign">
-        <p>By Mohd Faiz &hearts;</p>
+        <p>By Mohd Faiz <span className="heart">&hearts;</span></p>
       </div>
     </section>
   );
